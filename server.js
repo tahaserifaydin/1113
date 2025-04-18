@@ -1,17 +1,17 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB bağlantısı başarılı'))
-.catch(err => console.error('MongoDB bağlantı hatası:', err));
+// MongoDB bağlantısını geçici olarak devre dışı bıraktık
+// mongoose.connect(process.env.MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => console.log('MongoDB bağlantısı başarılı'))
+// .catch(err => console.error('MongoDB bağlantı hatası:', err));
 
 // Middleware
 app.use(cors());
@@ -35,6 +35,14 @@ app.use('/api/favorites', favoritesRoutes);
 app.use('/api/campaigns', campaignsRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/complaints', complaintsRoutes);
+
+// API durumunu kontrol etmek için basit bir endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    message: 'Tatilim API çalışıyor',
+    status: 'online'
+  });
+});
 
 // Rezervasyon işlemleri için endpoint
 app.post('/api/bookings', (req, res) => {
@@ -68,4 +76,4 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
-});
+}); 
