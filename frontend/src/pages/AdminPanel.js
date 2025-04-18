@@ -29,7 +29,7 @@ const AdminPanel = () => {
     endDate: '',
     image: ''
   });
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
   const [newPhoto, setNewPhoto] = useState('');
@@ -214,6 +214,14 @@ const AdminPanel = () => {
     setEditingCampaign(null);
   };
 
+  const handleCampaignInputChange = (e) => {
+    const { name, value } = e.target;
+    setCampaignFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleCampaignSubmit = async () => {
     try {
       const url = editingCampaign 
@@ -242,13 +250,17 @@ const AdminPanel = () => {
     } catch (error) {
       setSnackbar({
         open: true,
-        message: 'Kampanya işlemi sırasında bir hata oluştu',
+        message: 'İşlem sırasında bir hata oluştu',
         severity: 'error'
       });
     }
   };
 
   const handleDeleteCampaign = async (id) => {
+    if (!window.confirm('Bu kampanyayı silmek istediğinize emin misiniz?')) {
+      return;
+    }
+    
     try {
       const response = await fetch(`http://localhost:5002/api/campaigns/${id}`, {
         method: 'DELETE',
@@ -384,13 +396,13 @@ const AdminPanel = () => {
           className={`tab-button ${activeTab === 1 ? 'active' : ''}`}
           onClick={() => handleTabChange(1)}
         >
-          Şikayetler
+          Kampanyalar
         </button>
         <button 
           className={`tab-button ${activeTab === 2 ? 'active' : ''}`}
           onClick={() => handleTabChange(2)}
         >
-          Kampanyalar
+          Şikayetler
         </button>
       </div>
 
@@ -437,8 +449,39 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Şikayetler Sekmesi */}
+      {/* Kampanyalar Sekmesi */}
       {activeTab === 1 && (
+        <div className="campaigns-section">
+          <button className="add-button" onClick={() => handleOpenCampaignDialog()}>
+            Yeni Kampanya Ekle
+          </button>
+
+          <div className="campaigns-grid">
+            {campaigns.map((campaign) => (
+              <div className="campaign-card" key={campaign.id}>
+                <div className="campaign-content">
+                  <h3>{campaign.title}</h3>
+                  <p className="description">{campaign.description}</p>
+                  <p className="discount">İndirim: %{campaign.discount}</p>
+                  <p className="date">
+                    Başlangıç: {new Date(campaign.startDate).toLocaleDateString()}
+                  </p>
+                  <p className="date">
+                    Bitiş: {new Date(campaign.endDate).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="campaign-actions">
+                  <button onClick={() => handleOpenCampaignDialog(campaign)}>Düzenle</button>
+                  <button className="delete-button" onClick={() => handleDeleteCampaign(campaign.id)}>Sil</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Şikayetler Sekmesi */}
+      {activeTab === 2 && (
         <div className="complaints-section">
           <table className="complaints-table">
             <thead>
@@ -483,37 +526,6 @@ const AdminPanel = () => {
               )}
             </tbody>
           </table>
-        </div>
-      )}
-
-      {/* Kampanyalar Sekmesi */}
-      {activeTab === 2 && (
-        <div className="campaigns-section">
-          <button className="add-button" onClick={() => handleOpenCampaignDialog()}>
-            Yeni Kampanya Ekle
-          </button>
-
-          <div className="campaigns-grid">
-            {campaigns.map((campaign) => (
-              <div className="campaign-card" key={campaign.id}>
-                <div className="campaign-content">
-                  <h3>{campaign.title}</h3>
-                  <p className="description">{campaign.description}</p>
-                  <p className="discount">İndirim: %{campaign.discount}</p>
-                  <p className="date">
-                    Başlangıç: {new Date(campaign.startDate).toLocaleDateString()}
-                  </p>
-                  <p className="date">
-                    Bitiş: {new Date(campaign.endDate).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="campaign-actions">
-                  <button onClick={() => handleOpenCampaignDialog(campaign)}>Düzenle</button>
-                  <button className="delete-button" onClick={() => handleDeleteCampaign(campaign.id)}>Sil</button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       )}
 
@@ -569,57 +581,69 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Kampanya Ekleme/Düzenleme Dialog */}
+      {/* Kampanya Ekleme/Düzenleme Modalı */}
       {openCampaignDialog && (
-        <div className="dialog-overlay">
+        <div className="dialog-backdrop">
           <div className="dialog">
-            <h2>{editingCampaign ? 'Kampanya Düzenle' : 'Yeni Kampanya Ekle'}</h2>
+            <h2>{editingCampaign ? 'Kampanyayı Düzenle' : 'Yeni Kampanya Ekle'}</h2>
             <div className="dialog-content">
-              <input
-                type="text"
-                name="title"
-                placeholder="Kampanya Başlığı"
-                value={campaignFormData.title}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, title: e.target.value })}
-              />
-              <textarea
-                name="description"
-                placeholder="Açıklama"
-                value={campaignFormData.description}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, description: e.target.value })}
-              />
-              <input
-                type="number"
-                name="discount"
-                placeholder="İndirim Oranı (%)"
-                value={campaignFormData.discount}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, discount: e.target.value })}
-              />
-              <input
-                type="date"
-                name="startDate"
-                value={campaignFormData.startDate}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, startDate: e.target.value })}
-              />
-              <input
-                type="date"
-                name="endDate"
-                value={campaignFormData.endDate}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, endDate: e.target.value })}
-              />
-              <input
-                type="text"
-                name="image"
-                placeholder="Kampanya Görseli URL"
-                value={campaignFormData.image}
-                onChange={(e) => setCampaignFormData({ ...campaignFormData, image: e.target.value })}
-              />
+              <div className="form-group">
+                <label>Kampanya Başlığı:</label>
+                <input 
+                  type="text" 
+                  name="title" 
+                  value={campaignFormData.title} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Açıklama:</label>
+                <textarea 
+                  name="description" 
+                  value={campaignFormData.description} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>İndirim Oranı (%):</label>
+                <input 
+                  type="number" 
+                  name="discount" 
+                  value={campaignFormData.discount} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Başlangıç Tarihi:</label>
+                <input 
+                  type="date" 
+                  name="startDate" 
+                  value={campaignFormData.startDate ? campaignFormData.startDate.substring(0, 10) : ''} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Bitiş Tarihi:</label>
+                <input 
+                  type="date" 
+                  name="endDate" 
+                  value={campaignFormData.endDate ? campaignFormData.endDate.substring(0, 10) : ''} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Görsel URL:</label>
+                <input 
+                  type="text" 
+                  name="image" 
+                  value={campaignFormData.image} 
+                  onChange={handleCampaignInputChange} 
+                />
+              </div>
             </div>
             <div className="dialog-actions">
               <button onClick={handleCloseCampaignDialog}>İptal</button>
-              <button onClick={handleCampaignSubmit}>
-                {editingCampaign ? 'Güncelle' : 'Ekle'}
-              </button>
+              <button onClick={handleCampaignSubmit}>Kaydet</button>
             </div>
           </div>
         </div>

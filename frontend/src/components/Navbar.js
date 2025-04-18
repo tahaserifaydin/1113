@@ -35,6 +35,11 @@ function Navbar() {
               Oteller
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/admin" className="nav-links admin-link">
+              Admin Panel
+            </Link>
+          </li>
           {user ? (
             <>
               <li className="nav-item">
@@ -47,13 +52,6 @@ function Navbar() {
                   Profilim
                 </Link>
               </li>
-              {user.role === 'admin' && (
-                <li className="nav-item">
-                  <Link to="/admin" className="nav-links">
-                    Admin Panel
-                  </Link>
-                </li>
-              )}
               <li className="nav-item">
                 <button className="nav-links logout-btn" onClick={handleLogout}>
                   Çıkış Yap

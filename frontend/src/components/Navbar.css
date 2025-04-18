@@ -83,6 +83,20 @@
   color: #256ce1;
 }
 
+.admin-link {
+  background-color: #ff6b6b;
+  color: white !important;
+  border-radius: 4px;
+  padding: 8px 15px !important;
+  font-weight: bold;
+}
+
+.admin-link:hover {
+  background-color: #ff5252;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
 @media screen and (max-width: 960px) {
   .menu-icon {
     display: block;
