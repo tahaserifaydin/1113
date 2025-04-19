@@ -69,6 +69,12 @@ const HotelDetailModal = ({ open, onClose, hotel }) => {
     setSelectedImage(null);
   };
 
+  // Ensure that hotel.images or hotel.photos exists, otherwise use empty array
+  const hotelImages = hotel.images || hotel.photos || [];
+  
+  // Ensure that hotel.amenities exists, otherwise use empty array
+  const hotelAmenities = hotel.amenities || hotel.facilities || [];
+
   return (
     <>
       <Dialog
@@ -141,7 +147,7 @@ const HotelDetailModal = ({ open, onClose, hotel }) => {
                     </Box>
                   </Box>
                 </ImageListItem>
-                {hotel.images.map((img, index) => (
+                {hotelImages.map((img, index) => (
                   <ImageListItem key={index}>
                     <Box
                       sx={{
@@ -184,7 +190,7 @@ const HotelDetailModal = ({ open, onClose, hotel }) => {
             <Grid item xs={12} md={6}>
               <Typography variant="h6" gutterBottom>Otel Özellikleri</Typography>
               <List>
-                {hotel.amenities.map((amenity) => (
+                {hotelAmenities.map((amenity) => (
                   <ListItem key={amenity}>
                     <ListItemIcon>
                       {amenityIcons[amenity] || <Star />}

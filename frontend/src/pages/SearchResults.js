@@ -1,244 +1,237 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Container, 
-  Grid, 
-  Typography, 
-  Box, 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  Button, 
-  Divider,
-  Chip,
-  Rating,
-  Paper,
-  CircularProgress
-} from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import HotelIcon from '@mui/icons-material/Hotel';
-import PoolIcon from '@mui/icons-material/Pool';
-import WifiIcon from '@mui/icons-material/Wifi';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import { hotels } from '../data/hotels';
-import SearchBar from '../components/SearchBar';
+import { Container, Grid, Typography, Box, Paper, TextField, Select, MenuItem, FormControl, InputLabel, Slider, Button, Divider } from '@mui/material';
+import HotelCard from '../components/HotelCard';
+import { useLocation } from 'react-router-dom';
+import { useFavorite } from '../contexts/FavoriteContext';
 
 const SearchResults = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { favorites } = useFavorite();
+  const [hotels, setHotels] = useState([]);
+  const [filteredHotels, setFilteredHotels] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState([]);
-  const [searchParams, setSearchParams] = useState({
+  const [filters, setFilters] = useState({
     location: '',
-    checkIn: null,
-    checkOut: null,
-    guests: 2
+    priceRange: [0, 5000],
+    rating: 0,
+    amenities: [],
+    sortBy: 'recommended'
   });
 
+  // URL'deki arama parametrelerini al
   useEffect(() => {
-    // URL'den veya state'den arama parametrelerini al
-    const params = new URLSearchParams(location.search);
-    const locationParam = params.get('location') || location.state?.location || '';
-    const checkInParam = params.get('checkIn') || location.state?.checkIn || null;
-    const checkOutParam = params.get('checkOut') || location.state?.checkOut || null;
-    const guestsParam = parseInt(params.get('guests') || location.state?.guests || 2);
-
-    setSearchParams({
-      location: locationParam,
-      checkIn: checkInParam,
-      checkOut: checkOutParam,
-      guests: guestsParam
-    });
-
-    // Arama sonuçlarını filtrele
-    let filteredResults = [...hotels];
+    const searchParams = new URLSearchParams(location.search);
+    const locationParam = searchParams.get('location') || '';
+    const priceMin = searchParams.get('priceMin') ? parseInt(searchParams.get('priceMin')) : 0;
+    const priceMax = searchParams.get('priceMax') ? parseInt(searchParams.get('priceMax')) : 5000;
     
-    if (locationParam) {
-      filteredResults = filteredResults.filter(hotel => 
-        hotel.name.toLowerCase().includes(locationParam.toLowerCase()) || 
-        hotel.location.toLowerCase().includes(locationParam.toLowerCase())
+    setFilters(prev => ({
+      ...prev,
+      location: locationParam,
+      priceRange: [priceMin, priceMax]
+    }));
+  }, [location.search]);
+
+  // Otelleri yükle
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch('http://localhost:5002/api/hotels');
+        if (response.ok) {
+          const data = await response.json();
+          setHotels(data);
+        } else {
+          console.error('Oteller yüklenirken bir hata oluştu');
+        }
+      } catch (error) {
+        console.error('Oteller yüklenirken bir hata oluştu:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHotels();
+  }, []);
+
+  // Filtrelere göre otelleri filtrele
+  useEffect(() => {
+    if (hotels.length === 0) return;
+
+    let result = [...hotels];
+
+    // Konum filtresi
+    if (filters.location) {
+      result = result.filter(hotel => 
+        hotel.location.toLowerCase().includes(filters.location.toLowerCase())
       );
     }
 
-    // Yükleme efekti için kısa bir gecikme
-    setTimeout(() => {
-      setResults(filteredResults);
-      setLoading(false);
-    }, 800);
-  }, [location]);
+    // Fiyat aralığı filtresi
+    result = result.filter(hotel => 
+      hotel.price >= filters.priceRange[0] && hotel.price <= filters.priceRange[1]
+    );
 
-  const handleBookNow = (hotel) => {
-    navigate(`/booking/${hotel.id}`, {
-      state: {
-        checkIn: searchParams.checkIn,
-        checkOut: searchParams.checkOut,
-        guests: searchParams.guests
-      }
-    });
-  };
-
-  const handleViewHotel = (hotel) => {
-    navigate(`/hotel/${hotel.id}`, {
-      state: {
-        checkIn: searchParams.checkIn,
-        checkOut: searchParams.checkOut,
-        guests: searchParams.guests
-      }
-    });
-  };
-
-  const getAmenityIcon = (amenity) => {
-    switch (amenity.toLowerCase()) {
-      case 'havuz':
-        return <PoolIcon fontSize="small" />;
-      case 'wifi':
-        return <WifiIcon fontSize="small" />;
-      case 'restoran':
-        return <RestaurantIcon fontSize="small" />;
-      default:
-        return <HotelIcon fontSize="small" />;
+    // Yıldız sayısı filtresi
+    if (filters.rating > 0) {
+      result = result.filter(hotel => Math.floor(hotel.rating) >= filters.rating);
     }
+
+    // Sıralama
+    switch(filters.sortBy) {
+      case 'priceAsc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'priceDesc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'recommended':
+      default:
+        // Önerilen sıralama - varsayılan olarak rating'e göre
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+    }
+
+    setFilteredHotels(result);
+  }, [hotels, filters]);
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters({
+      ...filters,
+      [name]: value
+    });
+  };
+
+  const handlePriceChange = (event, newValue) => {
+    setFilters({
+      ...filters,
+      priceRange: newValue
+    });
+  };
+
+  const handleInteraction = (type) => {
+    console.log('User interaction:', type);
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-      <SearchBar initialValues={searchParams} />
-      
-      <Box sx={{ mt: 4, mb: 2 }}>
-        <Typography variant="h5" component="h1" gutterBottom>
-          {searchParams.location 
-            ? `"${searchParams.location}" için arama sonuçları` 
-            : 'Tüm Oteller'}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {results.length} otel bulundu
-        </Typography>
-      </Box>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Otel Arama Sonuçları
+      </Typography>
+      <Typography variant="body1" color="text.secondary" paragraph>
+        {filteredHotels.length} otel bulundu
+      </Typography>
 
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-          <CircularProgress />
-        </Box>
-      ) : results.length === 0 ? (
-        <Paper sx={{ p: 4, textAlign: 'center', mt: 4 }}>
-          <Typography variant="h6">
-            Aramanıza uygun sonuç bulunamadı.
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Lütfen farklı bir konum veya tarih aralığı deneyin.
-          </Typography>
-        </Paper>
-      ) : (
-        <Grid container spacing={3}>
-          {results.map((hotel) => (
-            <Grid item xs={12} key={hotel.id}>
-              <Card 
-                sx={{ 
-                  display: 'flex', 
-                  flexDirection: { xs: 'column', md: 'row' },
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 6
-                  }
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  sx={{ 
-                    width: { xs: '100%', md: 300 }, 
-                    height: { xs: 200, md: 'auto' },
-                    objectFit: 'cover'
-                  }}
-                  image={hotel.image}
-                  alt={hotel.name}
-                  onClick={() => handleViewHotel(hotel)}
-                  style={{ cursor: 'pointer' }}
-                />
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                  <CardContent sx={{ flex: '1 0 auto', pb: 1 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <Box>
-                        <Typography component="h2" variant="h6" sx={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleViewHotel(hotel)}>
-                          {hotel.name}
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-                          <LocationOnIcon fontSize="small" color="primary" sx={{ mr: 0.5 }} />
-                          <Typography variant="body2" color="text.secondary">
-                            {hotel.location}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        <Rating value={hotel.rating} precision={0.5} readOnly size="small" />
-                        <Typography variant="body2" color="text.secondary">
-                          {hotel.rating} / 5
-                        </Typography>
-                      </Box>
-                    </Box>
-                    
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                      {hotel.description}
-                    </Typography>
-                    
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
-                      {hotel.amenities.slice(0, 4).map((amenity, index) => (
-                        <Chip 
-                          key={index}
-                          icon={getAmenityIcon(amenity)}
-                          label={amenity}
-                          size="small"
-                          variant="outlined"
-                        />
-                      ))}
-                      {hotel.amenities.length > 4 && (
-                        <Chip 
-                          label={`+${hotel.amenities.length - 4}`}
-                          size="small"
-                          variant="outlined"
-                        />
-                      )}
-                    </Box>
-                  </CardContent>
-                  
-                  <Divider />
-                  
-                  <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center',
-                    p: 2
-                  }}>
-                    <Box>
-                      <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                        ₺{hotel.price}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        gecelik / kişi başı
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Button 
-                        variant="outlined" 
-                        onClick={() => handleViewHotel(hotel)}
-                      >
-                        Detayları Gör
-                      </Button>
-                      <Button 
-                        variant="contained" 
-                        color="primary"
-                        onClick={() => handleBookNow(hotel)}
-                      >
-                        Rezervasyon Yap
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
+      <Grid container spacing={4}>
+        {/* Filtreler */}
+        <Grid item xs={12} md={3}>
+          <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Filtreler
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+
+            <Box sx={{ mb: 3 }}>
+              <TextField
+                label="Konum"
+                name="location"
+                value={filters.location}
+                onChange={handleFilterChange}
+                fullWidth
+                size="small"
+                variant="outlined"
+              />
+            </Box>
+
+            <Box sx={{ mb: 3 }}>
+              <Typography gutterBottom>Fiyat Aralığı</Typography>
+              <Slider
+                value={filters.priceRange}
+                onChange={handlePriceChange}
+                valueLabelDisplay="auto"
+                min={0}
+                max={5000}
+                step={100}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2">{filters.priceRange[0]} TL</Typography>
+                <Typography variant="body2">{filters.priceRange[1]} TL</Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{ mb: 3 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Yıldız Sayısı</InputLabel>
+                <Select
+                  name="rating"
+                  value={filters.rating}
+                  label="Yıldız Sayısı"
+                  onChange={handleFilterChange}
+                >
+                  <MenuItem value={0}>Tümü</MenuItem>
+                  <MenuItem value={5}>5 Yıldız</MenuItem>
+                  <MenuItem value={4}>4 Yıldız ve üzeri</MenuItem>
+                  <MenuItem value={3}>3 Yıldız ve üzeri</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box sx={{ mb: 3 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Sıralama</InputLabel>
+                <Select
+                  name="sortBy"
+                  value={filters.sortBy}
+                  label="Sıralama"
+                  onChange={handleFilterChange}
+                >
+                  <MenuItem value="recommended">Önerilen</MenuItem>
+                  <MenuItem value="priceAsc">Fiyat - Artan</MenuItem>
+                  <MenuItem value="priceDesc">Fiyat - Azalan</MenuItem>
+                  <MenuItem value="rating">Değerlendirme</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Button variant="contained" color="primary" fullWidth>
+              Filtreleri Uygula
+            </Button>
+          </Paper>
         </Grid>
-      )}
+
+        {/* Otel Listesi */}
+        <Grid item xs={12} md={9}>
+          {loading ? (
+            <Typography>Oteller yükleniyor...</Typography>
+          ) : filteredHotels.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="h6" gutterBottom>
+                Arama kriterlerinize uygun otel bulunamadı.
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lütfen farklı bir arama kriteri deneyin.
+              </Typography>
+            </Box>
+          ) : (
+            <Grid container spacing={3}>
+              {filteredHotels.map((hotel) => (
+                <Grid item key={hotel.id} xs={12}>
+                  <HotelCard 
+                    hotel={{
+                      ...hotel,
+                      amenities: hotel.facilities || []
+                    }} 
+                    onInteraction={handleInteraction}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Grid>
+      </Grid>
     </Container>
   );
 };

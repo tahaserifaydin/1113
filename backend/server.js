@@ -5,13 +5,17 @@ require('dotenv').config();
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB bağlantısı başarılı'))
-.catch(err => console.error('MongoDB bağlantı hatası:', err));
+// Connect to MongoDB if MONGODB_URI is available
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('MongoDB bağlantısı başarılı'))
+  .catch(err => console.error('MongoDB bağlantı hatası:', err));
+} else {
+  console.log('MongoDB bağlantısı atlanıyor. In-memory veriler kullanılacak.');
+}
 
 // Middleware
 app.use(cors());
@@ -23,18 +27,18 @@ const hotelsRouter = require('./routes/hotels');
 const bookingsRouter = require('./routes/bookings');
 const reviewsRoutes = require('./routes/reviews');
 const favoritesRoutes = require('./routes/favorites');
-const campaignsRoutes = require('./routes/campaigns');
+const campaignsRouter = require('./routes/campaigns');
 const feedbackRoutes = require('./routes/feedback');
-const complaintsRoutes = require('./routes/complaints');
+const complaintsRouter = require('./routes/complaints');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/hotels', hotelsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/favorites', favoritesRoutes);
-app.use('/api/campaigns', campaignsRoutes);
+app.use('/api/campaigns', campaignsRouter);
 app.use('/api/feedback', feedbackRoutes);
-app.use('/api/complaints', complaintsRoutes);
+app.use('/api/complaints', complaintsRouter);
 
 // Rezervasyon işlemleri için endpoint
 app.post('/api/bookings', (req, res) => {
@@ -65,7 +69,16 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Bir şeyler ters gitti!' });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.send('Tatilim API is running');
+});
+
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
+  console.log(`API Endpoints:`);
+  console.log(`- Hotels: http://localhost:${PORT}/api/hotels`);
+  console.log(`- Complaints: http://localhost:${PORT}/api/complaints`);
+  console.log(`- Campaigns: http://localhost:${PORT}/api/campaigns`);
 });

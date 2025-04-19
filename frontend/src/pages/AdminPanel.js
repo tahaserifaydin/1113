@@ -29,7 +29,7 @@ const AdminPanel = () => {
     endDate: '',
     image: ''
   });
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
   const [newPhoto, setNewPhoto] = useState('');
@@ -416,31 +416,43 @@ const AdminPanel = () => {
           <div className="hotels-grid">
             {hotels.map((hotel) => (
               <div className="hotel-card" key={hotel.id}>
+                {hotel.image && (
+                  <div className="hotel-image-container">
+                    <img src={hotel.image} alt={hotel.name} className="hotel-main-image" />
+                  </div>
+                )}
                 <div className="hotel-content">
                   <h3>{hotel.name}</h3>
                   <p className="location">{hotel.location}</p>
                   <p className="price">Fiyat: {hotel.price} TL</p>
                   <div className="rating">{renderStars(hotel.rating)}</div>
                   
-                  {hotel.photos && hotel.photos.length > 0 && (
-                    <div className="photos-grid">
-                      {hotel.photos.map((photo, index) => (
-                        <div className="photo-item" key={index}>
-                          <img src={photo} alt={`${hotel.name} - Fotoğraf ${index + 1}`} />
-                          <button 
-                            className="delete-photo-button"
-                            onClick={() => handleDeletePhoto(hotel.id, index)}
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <div className="photos-section">
+                    <h4>Otel Fotoğrafları <span className="photo-count">({hotel.photos ? hotel.photos.length : 0})</span></h4>
+                    {hotel.photos && hotel.photos.length > 0 ? (
+                      <div className="photos-grid">
+                        {hotel.photos.map((photo, index) => (
+                          <div className="photo-item" key={index}>
+                            <img src={photo} alt={`${hotel.name} - Fotoğraf ${index + 1}`} />
+                            <button 
+                              className="delete-photo-button"
+                              onClick={() => handleDeletePhoto(hotel.id, index)}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="no-photos">Henüz fotoğraf eklenmemiş</p>
+                    )}
+                  </div>
                 </div>
                 <div className="hotel-actions">
                   <button onClick={() => handleOpenDialog(hotel)}>Düzenle</button>
-                  <button onClick={() => handleOpenPhotoDialog(hotel)}>Fotoğraf Ekle</button>
+                  <button onClick={() => handleOpenPhotoDialog(hotel)} className="add-photo-button">
+                    <span className="add-icon">+</span> Fotoğraf Ekle
+                  </button>
                   <button className="delete-button" onClick={() => handleDelete(hotel.id)}>Sil</button>
                 </div>
               </div>
@@ -459,6 +471,11 @@ const AdminPanel = () => {
           <div className="campaigns-grid">
             {campaigns.map((campaign) => (
               <div className="campaign-card" key={campaign.id}>
+                {campaign.image && (
+                  <div className="campaign-image-container">
+                    <img src={campaign.image} alt={campaign.title} className="campaign-image" />
+                  </div>
+                )}
                 <div className="campaign-content">
                   <h3>{campaign.title}</h3>
                   <p className="description">{campaign.description}</p>
@@ -499,15 +516,15 @@ const AdminPanel = () => {
               {Array.isArray(complaints) && complaints.length > 0 ? (
                 complaints.map((complaint) => (
                   <tr key={complaint._id}>
-                    <td>{complaint.name}</td>
-                    <td>{complaint.email}</td>
-                    <td>{complaint.hotelName}</td>
-                    <td>
+                    <td data-label="İsim">{complaint.name}</td>
+                    <td data-label="E-posta">{complaint.email}</td>
+                    <td data-label="Otel">{complaint.hotelName}</td>
+                    <td data-label="Puan">
                       <div className="rating">{renderStars(complaint.rating)}</div>
                     </td>
-                    <td>{complaint.comment}</td>
-                    <td>{new Date(complaint.createdAt).toLocaleDateString()}</td>
-                    <td>
+                    <td data-label="Yorum">{complaint.comment}</td>
+                    <td data-label="Tarih">{new Date(complaint.createdAt).toLocaleDateString()}</td>
+                    <td data-label="İşlemler">
                       <button 
                         className="delete-button"
                         onClick={() => handleDeleteComplaint(complaint._id)}
@@ -519,7 +536,7 @@ const AdminPanel = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center' }}>
+                  <td colSpan="7" className="empty-complaints">
                     Henüz şikayet bulunmuyor
                   </td>
                 </tr>
@@ -653,18 +670,44 @@ const AdminPanel = () => {
       {photoDialogOpen && (
         <div className="dialog-overlay">
           <div className="dialog">
-            <h2>Fotoğraf Ekle</h2>
+            <h2>Fotoğraf Ekle - {selectedHotel?.name}</h2>
             <div className="dialog-content">
-              <input
-                type="text"
-                placeholder="Fotoğraf URL"
-                value={newPhoto}
-                onChange={(e) => setNewPhoto(e.target.value)}
-              />
+              <div className="form-group">
+                <label>Fotoğraf URL:</label>
+                <input
+                  type="text"
+                  placeholder="https://example.com/photo.jpg"
+                  value={newPhoto}
+                  onChange={(e) => setNewPhoto(e.target.value)}
+                />
+                <p className="form-hint">*.jpg, *.png veya *.webp formatında bir fotoğraf URL'si girin</p>
+              </div>
+              
+              {newPhoto && (
+                <div className="photo-preview">
+                  <p className="preview-label">Önizleme:</p>
+                  <div className="preview-container">
+                    <img 
+                      src={newPhoto} 
+                      alt="Fotoğraf önizleme" 
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/300x200?text=Görüntü+Yüklenemedi';
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="dialog-actions">
               <button onClick={handleClosePhotoDialog}>İptal</button>
-              <button onClick={handleAddPhoto}>Ekle</button>
+              <button 
+                onClick={handleAddPhoto}
+                disabled={!newPhoto}
+                className={!newPhoto ? 'button-disabled' : ''}
+              >
+                Ekle
+              </button>
             </div>
           </div>
         </div>

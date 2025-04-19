@@ -2,106 +2,63 @@ const express = require('express');
 const router = express.Router();
 
 // Örnek otel verileri
-const hotels = [
+let hotels = [
   {
-    id: 1,
-    name: 'Lüks Otel',
-    location: 'İstanbul',
-    description: 'Merkezi konumda lüks otel',
-    rating: 5,
+    id: '1',
+    name: 'Grand Hotel',
+    location: 'İstanbul, Türkiye',
     price: 1500,
-    image: 'https://example.com/hotel1.jpg',
-    type: 'hotel'
+    rating: 4.5,
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+    description: 'Şehrin merkezinde lüks bir otel deneyimi.',
+    facilities: ['WiFi', 'Spa', 'Havuz', 'Restoran', 'Bar', 'Fitness Merkezi'],
+    photos: [
+      'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'
+    ]
   },
   {
-    id: 2,
-    name: 'Deniz Manzaralı Villa',
-    location: 'Bodrum',
-    description: 'Deniz manzaralı özel villa',
-    rating: 4,
-    price: 2500,
-    image: 'https://example.com/villa1.jpg',
-    type: 'villa'
-  },
-  {
-    id: 3,
-    name: 'Orman Bungalovu',
-    location: 'Antalya',
-    description: 'Doğa ile iç içe bungalov',
-    rating: 4,
-    price: 1200,
-    image: 'https://example.com/bungalow1.jpg',
-    type: 'bungalow'
-  },
-  {
-    id: 4,
-    name: 'Butik Otel',
-    location: 'İzmir',
-    description: 'Şık butik otel',
-    rating: 4,
-    price: 1000,
-    image: 'https://example.com/hotel2.jpg',
-    type: 'hotel'
-  },
-  {
-    id: 5,
-    name: 'Dağ Evi Villa',
-    location: 'Uludağ',
-    description: 'Kar manzaralı dağ evi',
-    rating: 5,
-    price: 3000,
-    image: 'https://example.com/villa2.jpg',
-    type: 'villa'
-  },
-  {
-    id: 6,
-    name: 'Sahil Bungalovu',
-    location: 'Çeşme',
-    description: 'Sahile sıfır bungalov',
-    rating: 4,
-    price: 1800,
-    image: 'https://example.com/bungalow2.jpg',
-    type: 'bungalow'
-  },
-  {
-    id: 7,
-    name: 'Termal Otel',
-    location: 'Pamukkale',
-    description: 'Termal suyu olan otel',
-    rating: 4,
+    id: '2',
+    name: 'Lüks Resort',
+    location: 'Antalya, Türkiye',
     price: 2000,
-    image: 'https://example.com/hotel3.jpg',
-    type: 'hotel'
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1075&q=80',
+    description: 'Deniz kenarında lüks bir tatil deneyimi için idealdir.',
+    facilities: ['WiFi', 'Plaj', 'Havuz', 'Spa', 'Restoran', 'Bar', 'Fitness'],
+    photos: [
+      'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+    ]
   },
   {
-    id: 8,
-    name: 'Göl Kenarı Villa',
-    location: 'Abant',
-    description: 'Göl manzaralı villa',
-    rating: 5,
-    price: 2800,
-    image: 'https://example.com/villa3.jpg',
-    type: 'villa'
+    id: '3',
+    name: 'Deniz View Hotel',
+    location: 'Bodrum, Türkiye',
+    price: 1800,
+    rating: 4.2,
+    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+    description: 'Deniz manzaralı odalarda konforlu bir konaklama.',
+    facilities: ['WiFi', 'Havuz', 'Restoran', 'Bar', 'Özel Plaj'],
+    photos: [
+      'https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'
+    ]
   },
   {
-    id: 9,
-    name: 'Ağaç Ev Bungalov',
-    location: 'Ayvalık',
-    description: 'Ağaçların arasında bungalov',
-    rating: 4,
-    price: 1500,
-    image: 'https://example.com/bungalow3.jpg',
-    type: 'bungalow'
-  },
-  {
-    id: 10,
-    name: 'Tarihi Otel',
-    location: 'Safranbolu',
-    description: 'Tarihi konak otel',
-    rating: 5,
+    id: '4',
+    name: 'Premium Resort',
+    location: 'Fethiye, Türkiye',
     price: 2200,
-    image: 'https://example.com/hotel4.jpg',
-    type: 'hotel'
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+    description: 'Lüks bir tatil deneyimi için tasarlanmış premium tesis.',
+    facilities: ['WiFi', 'Özel Plaj', 'Spa', 'Infinity Havuz', 'Gourmet Restoran', 'Su Sporları'],
+    photos: [
+      'https://images.unsplash.com/photo-1601701119533-fde70375eb5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1049&q=80'
+    ]
   }
 ];
 
@@ -112,35 +69,49 @@ router.get('/', (req, res) => {
 
 // Belirli bir oteli getir
 router.get('/:id', (req, res) => {
-  const hotel = hotels.find(h => h.id === parseInt(req.params.id));
+  const hotel = hotels.find(h => h.id === req.params.id);
   if (!hotel) {
     return res.status(404).json({ message: 'Otel bulunamadı' });
   }
   res.json(hotel);
 });
 
-// Otele ait yorumları getir
-router.get('/:id/reviews', (req, res) => {
-  const hotelId = parseInt(req.params.id);
-  const hotelReviews = [
-    {
-      id: 1,
-      hotelId: hotelId,
-      userName: 'Ahmet Y.',
-      rating: 4.5,
-      comment: 'Harika bir deneyimdi, kesinlikle tekrar geleceğim.',
-      date: '2024-04-15'
-    },
-    {
-      id: 2,
-      hotelId: hotelId,
-      userName: 'Ayşe K.',
-      rating: 5,
-      comment: 'Mükemmel hizmet, çok temiz ve konforlu.',
-      date: '2024-04-14'
-    }
-  ];
-  res.json(hotelReviews);
+// Yeni otel ekle
+router.post('/', (req, res) => {
+  const newHotel = {
+    id: (hotels.length + 1).toString(),
+    ...req.body,
+    photos: req.body.photos || []
+  };
+  
+  hotels.push(newHotel);
+  res.status(201).json(newHotel);
+});
+
+// Otel güncelle
+router.put('/:id', (req, res) => {
+  const index = hotels.findIndex(h => h.id === req.params.id);
+  if (index === -1) {
+    return res.status(404).json({ message: 'Otel bulunamadı' });
+  }
+  
+  hotels[index] = {
+    ...hotels[index],
+    ...req.body
+  };
+  
+  res.json(hotels[index]);
+});
+
+// Otel sil
+router.delete('/:id', (req, res) => {
+  const index = hotels.findIndex(h => h.id === req.params.id);
+  if (index === -1) {
+    return res.status(404).json({ message: 'Otel bulunamadı' });
+  }
+  
+  hotels.splice(index, 1);
+  res.json({ message: 'Otel başarıyla silindi' });
 });
 
 module.exports = router; 

@@ -22,12 +22,14 @@ import Payment from './pages/Payment';
 import BookingSuccess from './pages/BookingSuccess';
 import AdminPanel from './pages/AdminPanel';
 import Complaints from './pages/Complaints';
+import Booking from './pages/Booking';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <FavoriteProvider>
+    <Router>
       <AuthProvider>
-        <Router>
+        <FavoriteProvider>
           <div className="app">
             <Navbar />
             <main>
@@ -36,20 +38,23 @@ function App() {
                 <Route path="/hotels/:id" element={<HotelDetail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/search" element={<SearchResults />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/booking-success" element={<BookingSuccess />} />
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="/complaints" element={<Complaints />} />
+                <Route path="/payment" element={<Payment />} />
+                <Route path="/hotel/:id" element={<HotelDetail />} />
+                <Route path="/booking/:id" element={<Booking />} />
+                <Route path="/booking-success" element={<BookingSuccess />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <Footer />
           </div>
-        </Router>
+        </FavoriteProvider>
       </AuthProvider>
-    </FavoriteProvider>
+    </Router>
   );
 }
 

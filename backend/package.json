@@ -1,23 +1,20 @@
 {
   "name": "tatilim-backend",
   "version": "1.0.0",
-  "description": "TATİLİM vacation booking platform backend",
+  "description": "Tatilim app backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.0.0",
-    "multer": "^1.4.5-lts.1"
+    "mongoose": "^8.13.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }
