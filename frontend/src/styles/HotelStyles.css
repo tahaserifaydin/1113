@@ -1,0 +1,326 @@
+/* Otel kartları için stil tanımlamaları */
+
+/* Genel stiller */
+:root {
+  --primary-color: #1976d2;
+  --secondary-color: #f5f5f5;
+  --text-color: #333;
+  --light-gray: #e0e0e0;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  color: var(--text-color);
+  background-color: #f9f9f9;
+}
+
+.container {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Otel kartları arasındaki boşluğu artırma */
+.hotel-card {
+  margin-bottom: 2rem !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: var(--transition) !important;
+}
+
+.hotel-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Otel detay kartı için stil */
+.hotel-detail-card {
+  display: flex !important;
+  height: 220px !important;
+  background-color: white !important;
+}
+
+/* Otel listesi grid boşluklarını artırma */
+.hotel-grid {
+  margin: 0 -1rem;
+}
+
+.hotel-grid-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Otel kartı içindeki resim için stil */
+.hotel-image {
+  width: 300px !important;
+  height: 220px !important;
+  object-fit: cover !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+}
+
+.hotel-image:hover {
+  opacity: 0.9;
+}
+
+/* Otel içerik alanı */
+.hotel-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  padding: 1rem !important;
+}
+
+.hotel-content-card {
+  flex: 1 0 auto !important;
+  padding: 1rem !important;
+}
+
+/* Otel başlık alanı */
+.hotel-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Otel konum bilgisi */
+.hotel-location {
+  display: flex !important;
+  align-items: center !important;
+  margin-top: 0.5rem !important;
+  color: #666 !important;
+}
+
+.location-icon {
+  font-size: 18px !important;
+  color: #666 !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Otel derecelendirme */
+.hotel-rating {
+  margin-top: 0.5rem !important;
+}
+
+/* Otel fiyat alanı */
+.hotel-price {
+  text-align: right !important;
+}
+
+.price-text {
+  font-weight: bold !important;
+  color: var(--primary-color) !important;
+}
+
+/* Otel özellikleri */
+.hotel-amenities {
+  margin-top: 1rem !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+}
+
+.amenity-chip {
+  background-color: var(--secondary-color) !important;
+  transition: var(--transition) !important;
+}
+
+.amenity-chip:hover {
+  background-color: var(--light-gray) !important;
+}
+
+/* Otel butonları */
+.hotel-actions {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 1rem 1rem 1rem !important;
+}
+
+.detail-button {
+  margin-right: 1rem !important;
+  background-color: var(--primary-color) !important;
+  transition: var(--transition) !important;
+}
+
+.detail-button:hover {
+  background-color: #1565c0 !important;
+}
+
+.book-button {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  transition: var(--transition) !important;
+}
+
+.book-button:hover {
+  background-color: rgba(25, 118, 210, 0.04) !important;
+}
+
+/* Filtreler bölümü */
+.filters-section .card {
+  padding: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  border-radius: 8px !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.filters-section .title {
+  margin-bottom: 1.5rem !important;
+  font-weight: 500 !important;
+  color: var(--text-color) !important;
+}
+
+.filters-section .box {
+  margin-bottom: 1.5rem !important;
+}
+
+.filters-section .label {
+  margin-bottom: 0.5rem !important;
+  font-weight: 500 !important;
+}
+
+.filters-section .slider {
+  color: var(--primary-color) !important;
+}
+
+.filters-section .form-control {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Otel listesi bölümü */
+.hotels-list-section .box {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.hotels-list-section .title {
+  font-weight: 500 !important;
+}
+
+.hotels-list-section .form-control {
+  min-width: 200px !important;
+}
+
+.hotels-list-section .sort-icon {
+  margin-right: 0.5rem !important;
+}
+
+/* Otel grid kartları */
+.hotels-list-section .card {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: var(--transition) !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.hotels-list-section .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.hotels-list-section .card-content {
+  padding: 1.25rem !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.hotels-list-section .box {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1rem !important;
+}
+
+.hotels-list-section .title {
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.hotels-list-section .label {
+  margin-left: 0.5rem !important;
+}
+
+.hotels-list-section .rating {
+  margin-right: 0.5rem !important;
+}
+
+.hotels-list-section .price {
+  font-weight: bold !important;
+  color: var(--primary-color) !important;
+}
+
+.hotels-list-section .chip {
+  background-color: var(--secondary-color) !important;
+}
+
+.hotels-list-section .button {
+  margin-top: 1rem !important;
+  background-color: var(--primary-color) !important;
+  transition: var(--transition) !important;
+  margin-top: auto !important;
+}
+
+.hotels-list-section .button:hover {
+  background-color: #1565c0 !important;
+}
+
+.hotels-list-section .favorite-button {
+  color: #f44336 !important;
+}
+
+.hotels-list-section .favorite-icon {
+  transition: var(--transition) !important;
+}
+
+/* Responsive düzen için medya sorguları */
+@media (max-width: 960px) {
+  .hotel-detail-card {
+    height: auto !important;
+    flex-direction: column !important;
+  }
+  
+  .hotel-image {
+    width: 100% !important;
+    height: 250px !important;
+  }
+  
+  .hotel-grid-item {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hotel-image {
+    height: 200px !important;
+  }
+  
+  .hotel-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .detail-button {
+    margin-right: 0 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .hotels-list-section .box {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .hotels-list-section .form-control {
+    margin-top: 1rem !important;
+    width: 100% !important;
+  }
+}

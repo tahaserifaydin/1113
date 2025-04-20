@@ -1,0 +1,732 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.logout-button {
+  padding: 0.5rem 1rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.tab-button.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+}
+
+.add-button {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #218838;
+}
+
+.hotels-grid,
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.hotel-card,
+.campaign-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotel-card:hover,
+.campaign-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-content,
+.campaign-content {
+  padding: 1rem;
+}
+
+.hotel-content h3,
+.campaign-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.location,
+.description {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.price,
+.discount {
+  color: #28a745;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.rating {
+  margin-bottom: 1rem;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.2rem;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+  border: 1px dashed #ddd;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.photo-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.photo-item:hover {
+  transform: scale(1.03);
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.delete-photo-button {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.photo-item:hover .delete-photo-button {
+  opacity: 1;
+}
+
+.delete-photo-button:hover {
+  background: rgba(220, 53, 69, 1);
+}
+
+.hotel-actions,
+.campaign-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+}
+
+.hotel-actions button,
+.campaign-actions button {
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.hotel-actions button:hover,
+.campaign-actions button:hover {
+  background: #e9ecef;
+}
+
+.delete-button {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.delete-button:hover {
+  background: #dc3545;
+  color: white;
+}
+
+/* Şikayetler Tablosu Stilleri - Geliştirilmiş */
+.complaints-section {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: white;
+}
+
+.complaints-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.complaints-table th,
+.complaints-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.complaints-table th {
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.complaints-table tr:nth-child(even) {
+  background-color: #f5f9ff;
+}
+
+.complaints-table tr:hover {
+  background-color: #e3f2fd;
+}
+
+.complaints-table td {
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.complaints-table td:nth-child(5) {
+  /* Yorum sütunu */
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.complaints-table .rating {
+  margin: 0;
+}
+
+.complaints-table .delete-button {
+  padding: 6px 12px;
+  background-color: #fff2f2;
+  border: 1px solid #ffcdd2;
+  color: #d32f2f;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.complaints-table .delete-button:hover {
+  background-color: #d32f2f;
+  color: white;
+  border-color: #d32f2f;
+}
+
+.empty-complaints {
+  text-align: center;
+  padding: 2rem;
+  color: #757575;
+  font-style: italic;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dialog h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dialog-content input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.dialog-content input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dialog-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.dialog-actions button:first-child {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.dialog-actions button:last-child {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.dialog-actions button:hover {
+  opacity: 0.9;
+}
+
+.photo-preview {
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.preview-label {
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.preview-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.preview-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive tasarım için */
+@media (max-width: 600px) {
+  .dialog {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .dialog-content input {
+    padding: 8px;
+  }
+
+  .dialog-actions {
+    flex-direction: column;
+  }
+
+  .dialog-actions button {
+    width: 100%;
+  }
+}
+
+.snackbar {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.snackbar.success {
+  background: #28a745;
+}
+
+.snackbar.error {
+  background: #dc3545;
+}
+
+.snackbar button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hotels-grid,
+  .campaigns-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .complaints-table {
+    font-size: 12px;
+  }
+
+  .complaints-table th,
+  .complaints-table td {
+    padding: 8px;
+  }
+
+  .complaints-table th {
+    display: none;
+  }
+
+  .complaints-table td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-bottom: none;
+  }
+
+  .complaints-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 8px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .complaints-table tr {
+    border-bottom: 2px solid #ddd;
+    display: block;
+    margin-bottom: 1rem;
+    background-color: white !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px;
+  }
+
+  .complaints-table td:nth-child(5) {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hotel-actions,
+  .campaign-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hotel-actions button,
+  .campaign-actions button {
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  .dialog {
+    width: 95%;
+    max-width: 95%;
+    max-height: 90vh;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .dialog-content {
+    flex-direction: column;
+  }
+
+  .dialog-content input,
+  .dialog-content textarea {
+    width: 100%;
+  }
+
+  .dialog-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dialog-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .tab-button {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .photos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .snackbar {
+    width: 90%;
+    left: 5%;
+    font-size: 0.9rem;
+  }
+}
+
+.campaign-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.campaign-image-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.campaign-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.campaign-image:hover {
+  transform: scale(1.05);
+}
+
+.hotel-image-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.hotel-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hotel-main-image:hover {
+  transform: scale(1.05);
+}
+
+.photos-section {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.photos-section h4 {
+  margin: 0 0 0.5rem 0;
+  color: #555;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.photo-count {
+  color: #888;
+  font-weight: normal;
+  margin-left: 0.3rem;
+}
+
+.no-photos {
+  color: #888;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border: 1px dashed #ddd;
+}
+
+.add-photo-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background-color: #007bff !important;
+  color: white !important;
+  border: none !important;
+}
+
+.add-photo-button:hover {
+  background-color: #0069d9 !important;
+}
+
+.add-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.admin-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-buttons button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  background-color: #28a745;
+  color: white;
+}
+
+.admin-buttons button:hover {
+  background-color: #218838;
+}
+
+.photo-button {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.photo-button:hover {
+  background-color: #138496;
+}
+
+.edit-button {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.add-icon,
+.edit-icon,
+.delete-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+} 

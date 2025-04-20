@@ -1,0 +1,117 @@
+.complaints-container {
+  padding: 2rem;
+  max-width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+.complaints-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.feedback-icon {
+  color: #1976d2;
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+
+.page-title {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #555;
+  max-width: 90%;
+}
+
+.complaint-form {
+  padding-top: 0.5rem;
+}
+
+.form-input .MuiOutlinedInput-root {
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.form-input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2;
+}
+
+.form-input .MuiInputLabel-root.Mui-focused {
+  color: #1976d2;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.rating-label {
+  font-weight: 500;
+  color: #333;
+  min-width: 120px;
+}
+
+.star-icon {
+  color: #ffc107;
+  font-size: 2rem;
+}
+
+.empty-star-icon {
+  color: #e0e0e0;
+  font-size: 2rem;
+}
+
+.comment-input {
+  margin-top: 0.5rem;
+}
+
+.comment-input .MuiOutlinedInput-root {
+  padding: 12px;
+}
+
+.submit-button {
+  margin-top: 1rem;
+  height: 54px;
+  font-weight: 600;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  background-color: #1976d2;
+  transition: all 0.3s ease;
+  text-transform: none;
+  font-size: 1.1rem;
+}
+
+.submit-button:not(:disabled):hover {
+  background-color: #1565c0;
+  box-shadow: 0 6px 12px rgba(25, 118, 210, 0.3);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .complaints-container {
+    padding: 1.5rem;
+  }
+  
+  .complaints-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .feedback-icon {
+    margin-bottom: 1rem;
+  }
+  
+  .rating-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+} 

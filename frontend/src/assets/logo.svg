@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="60px" viewBox="0 0 200 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Tatilim Logo</title>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M30,10 L40,10 L40,50 L30,50 L30,10 Z M20,20 L50,20 L50,30 L20,30 L20,20 Z" id="T" fill="#FFFFFF"></path>
+        <path d="M60,30 C60,20 65,10 75,10 C85,10 90,20 90,30 C90,40 85,50 75,50 C65,50 60,40 60,30 Z M70,30 C70,35 72.5,40 75,40 C77.5,40 80,35 80,30 C80,25 77.5,20 75,20 C72.5,20 70,25 70,30 Z" id="a" fill="#FFFFFF"></path>
+        <path d="M100,10 L110,10 L110,50 L100,50 L100,10 Z" id="t" fill="#FFFFFF"></path>
+        <path d="M120,10 L130,10 L130,50 L120,50 L120,10 Z" id="i" fill="#FFFFFF"></path>
+        <path d="M140,10 L150,10 L150,40 L170,40 L170,50 L140,50 L140,10 Z" id="l" fill="#FFFFFF"></path>
+        <path d="M180,10 L190,10 L190,50 L180,50 L180,10 Z" id="i" fill="#FFFFFF"></path>
+        <circle id="dot" fill="#FFFFFF" cx="130" cy="5" r="3"></circle>
+        <circle id="dot" fill="#FFFFFF" cx="190" cy="5" r="3"></circle>
+        <path d="M0,58 L200,58" id="underline" stroke="#FFFFFF" stroke-width="2"></path>
+    </g>
+</svg>
